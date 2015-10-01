@@ -100,6 +100,7 @@ Log in as the buildbot user, and do the following:
     pip install buildbot==0.8.12 requests rosdistro
     git clone git@github.com:mikeferguson/buildbot-ros.git
     buildbot create-master buildbot-ros
+    deactivate
 
 If using the Pull Request builder, you will also need to:
 
@@ -111,6 +112,7 @@ edit buildbot-ros/buildbot.tac and set the line 'umask=None' to 'umask=0022' so 
 can be found by your webserver. You'll also want to edit buildbot-ros/master.cfg to add your own
 project settings (such as which rosdistro file to use), and then start the buildbot:
 
+    workon buildbot-env
     buildbot start buildbot-ros
 
 To actually have debbuilders succeed, you'll need to create the APT repository for debs to be
@@ -169,12 +171,14 @@ for the master. Once you have a buildbot user and virtualenv, do the following a
     pip install buildbot-slave
     echo "export PATH=/home/buildbot/buildbot-ros/scripts:${PATH}" >> ~/.virtualenvs/buildbot-env/bin/activate
     buildslave create-slave rosbuilder1 localhost:9989 rosbuilder1 mebuildslotsaros
+    deactivate
 
 As with the master, change umask to be 0022 in the .tac file.
 It is probably a good idea to change the password (mebuildslotsaros), in both this command and the
 master/master.cfg. You can also define additional slaves in the master/master.cfg file, currently
 we define rosbuilder1 and 2. To start the slave:
 
+    workon buildbot-env
     buildslave start rosbuilder1
 
 For builds to succeed, you'll probably need to make it so the buildbot can run cowbuilder as root.
