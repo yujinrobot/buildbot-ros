@@ -87,18 +87,17 @@ cache automatically.
 ##Setup for Buildbot Master
 Install prerequisites:
 
-    sudo apt-get install python-virtualenv python-dev
+    sudo apt-get install python-virtualenv python-dev virtualenvwrapper
 
 Create a user 'buildbot'. Make sure you don't leave the Name field blank - if you do you'll end up
 with incorrect syntax in the deb changelogs, because git-dch uses the user's actual name in the changelog.
 Log in as the buildbot user, and do the following:
 
     cd ~
-    virtualenv --no-site-packages buildbot-env
-    source buildbot-env/bin/activate
-    echo "export PATH=/home/buildbot/buildbot-ros/scripts:${PATH}" >> buildbot-env/bin/activate
-    easy_install buildbot==0.8.12 requests
-    pip install rosdistro
+    mkvirtualenv --no-site-packages buildbot-env
+    workon buildbot-env
+    echo "export PATH=/home/buildbot/buildbot-ros/scripts:${PATH}" >> ~/.virtualenvs/buildbot-env/bin/activate
+    pip install buildbot==0.8.12 requests rosdistro
     git clone git@github.com:mikeferguson/buildbot-ros.git
     buildbot create-master buildbot-ros
 
@@ -166,9 +165,9 @@ under your own account):
 If you are on a different machine, you'll have to create the buildbot user and virtualenv as done
 for the master. Once you have a buildbot user and virtualenv, do the following as 'buildbot':
 
-    source buildbot-env/bin/activate
-    easy_install buildbot-slave
-    echo "export PATH=/home/buildbot/buildbot-ros/scripts:${PATH}" >> buildbot-env/bin/activate
+    workon buildbot-env
+    pip install buildbot-slave
+    echo "export PATH=/home/buildbot/buildbot-ros/scripts:${PATH}" >> ~/.virtualenvs/buildbot-env/bin/activate
     buildslave create-slave rosbuilder1 localhost:9989 rosbuilder1 mebuildslotsaros
 
 As with the master, change umask to be 0022 in the .tac file.
