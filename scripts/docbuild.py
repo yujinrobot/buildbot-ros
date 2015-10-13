@@ -9,8 +9,11 @@ import sys, os, shutil, subprocess
 ## @param workspace A bind-mounted directory to build from/in
 ## @param rosdistro The rosdistro to build for (for instance, 'groovy')
 def run_docbuild(workspace, rosdistro):
-    # Install depends
+    # Cleaning old apt caches and updating
+    call(['rm', '/var/lib/apt/lists/*'])
+    call(['rm', '/var/lib/apt/lists/partial/*'])
     call(['apt-get', 'update'])
+    # Install depends
     call(['apt-get', 'install', '--yes',
           'ros-%s-ros'%rosdistro,
           'ros-%s-rosdoc-lite'%rosdistro,
