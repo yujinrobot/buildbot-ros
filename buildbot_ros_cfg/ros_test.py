@@ -111,7 +111,8 @@ def ros_testbuild(c, job_name, url, branch, distro, arch, rosdistro, machines,
             branch=util.Property('branch', default=branch),
             alwaysUseLatest=True,
             mode='full',
-            workdir=binddir+'/src/'+job_name
+            workdir=binddir+'/src/'+job_name,
+            submodules=True
         )
     )
     # Download testbuild.py script from master

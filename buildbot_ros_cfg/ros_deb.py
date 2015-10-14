@@ -42,7 +42,8 @@ def ros_debbuild(c, job_name, packages, url, distro, arch, rosdistro, version, m
             repourl = url,
             branch = 'master',
             alwaysUseLatest = True, # this avoids broken builds when schedulers send wrong tag/rev
-            mode = 'full' # clean out old versions
+            mode = 'full', # clean out old versions
+            submodules = True  # updating submodules if needed
         )
     )
     # Update the cowbuilder
@@ -64,6 +65,15 @@ def ros_debbuild(c, job_name, packages, url, distro, arch, rosdistro, version, m
                 haltOnFailure = True,
                 name = package+'-checkout',
                 command = ['git', 'checkout', Interpolate(branch_name), '--force'],
+                hideStepIf = success
+            )
+        )
+        # updating submodule needed if hash changed
+        f.addStep(
+            ShellCommand(
+                haltOnFailure = True,
+                name = package+'-submodule-update',
+                command = ['git', 'submodule','update' , '--init', '--recursive'],
                 hideStepIf = success
             )
         )
