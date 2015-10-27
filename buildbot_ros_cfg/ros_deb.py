@@ -43,7 +43,6 @@ def ros_debbuild(c, job_name, packages, url, distro, arch, rosdistro, version, m
             branch = 'master',
             alwaysUseLatest = True, # this avoids broken builds when schedulers send wrong tag/rev
             mode = 'full', # clean out old versions
-            submodules = True  # updating submodules if needed
         )
     )
     # Update the cowbuilder
